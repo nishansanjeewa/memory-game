@@ -2,48 +2,66 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Memory Match Game</title>
 
 <style>
+    /* Reset and Base Styles */
+    * {
+        box-sizing: border-box;
+    }
+
     body {
         margin: 0;
-        font-family: Arial, sans-serif;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background: #f2f2f2;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh; /* Use min-height to prevent cutoffs on small screens */
     }
 
     h1 {
         margin-bottom: 10px;
-        font-size: 32px;
+        font-size: clamp(24px, 5vw, 32px); /* Fluid font size */
         color: #333;
+        text-align: center;
     }
 
+    #moves {
+        margin-bottom: 15px;
+        font-size: 20px;
+        color: #555;
+    }
+
+    /* Responsive Game Grid */
     #game {
         display: grid;
-        grid-template-columns: repeat(4, 100px);
-        grid-gap: 15px;
+        grid-template-columns: repeat(4, 1fr); /* 4 Equal columns */
+        gap: 15px;
+        width: 90%;         /* Take up 90% of mobile screen width */
+        max-width: 460px;   /* Stop growing after 460px (Desktop view) */
         margin-bottom: 20px;
     }
 
     .card {
-        width: 100px;
-        height: 100px;
         background: white;
-        border-radius: 10px;
+        border-radius: 8px;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 40px;
         cursor: pointer;
         border: 2px solid #ddd;
         transition: transform 0.3s;
         transform-style: preserve-3d;
         position: relative;
+        
+        /* RESPONSIVE MAGIC HERE: */
+        width: 100%;          /* Fill the grid cell */
+        aspect-ratio: 1 / 1;  /* Force it to be a square */
+        -webkit-tap-highlight-color: transparent; /* Remove mobile tap highlight */
     }
 
     .card.flipped {
@@ -58,8 +76,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 10px;
-        font-size: 40px;
+        border-radius: 8px;
+        font-size: 2.5rem; /* Default large size */
+        user-select: none; /* Prevent highlighting text on click */
     }
 
     .front {
@@ -70,27 +89,27 @@
 
     .back {
         background: white;
-        border: 2px solid #ddd;
-        font-size: 40px;
-    }
-
-    #moves {
-        margin-bottom: 10px;
-        font-size: 20px;
+        color: #333;
     }
 
     button {
-        padding: 10px 20px;
+        padding: 12px 24px;
         background: #4e73df;
         border: none;
         color: white;
         font-size: 18px;
-        border-radius: 6px;
+        border-radius: 50px;
         cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: background 0.2s;
     }
 
     button:hover {
         background: #3755c1;
+    }
+
+    button:active {
+        transform: scale(0.98);
     }
 
     /* Celebration popup */
@@ -100,29 +119,42 @@
         left: 50%;
         transform: translate(-50%, -50%);
         background: white;
-        padding: 30px 50px;
+        padding: 30px;
+        width: 90%;
+        max-width: 400px;
         border-radius: 12px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-        font-size: 28px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        font-size: 24px;
         text-align: center;
         display: none;
         z-index: 1000;
     }
 
-    /* Confetti */
     .confetti {
         position: fixed;
         width: 10px;
         height: 10px;
-        background-color: red;
         top: -10px;
         animation: fall 3s linear forwards;
         z-index: 999;
     }
 
     @keyframes fall {
-        to {
-            transform: translateY(120vh) rotate(360deg);
+        to { transform: translateY(110vh) rotate(360deg); }
+    }
+
+    /* MOBILE ADJUSTMENTS */
+    @media (max-width: 480px) {
+        #game {
+            gap: 10px; /* Smaller gaps on phone */
+        }
+        
+        .front, .back {
+            font-size: 2rem; /* Smaller emojis on phone */
+        }
+
+        h1 {
+            font-size: 24px;
         }
     }
 </style>
@@ -130,14 +162,18 @@
 
 <body>
 
-<h1>Memory Match Game</h1>
+<h1>Memory Match</h1>
 <div id="moves">Moves: 0</div>
 
 <div id="game"></div>
 
-<button onclick="restartGame()">Restart</button>
+<button onclick="restartGame()">Restart Game</button>
 
-<div id="winMessage">🎉 You Win! 🎉</div>
+<div id="winMessage">
+    <h2>🎉 You Win! 🎉</h2>
+    <p>Great memory!</p>
+    <button onclick="restartGame()">Play Again</button>
+</div>
 
 <script>
     const game = document.getElementById("game");
@@ -222,8 +258,11 @@
  
     function showCelebration() {
         winMessage.style.display = "block";
+        
+        // Clean up old confetti if any
+        document.querySelectorAll('.confetti').forEach(c => c.remove());
 
-        for (let i = 0; i < 120; i++) {
+        for (let i = 0; i < 100; i++) {
             const confetti = document.createElement("div");
             confetti.classList.add("confetti");
 
@@ -233,7 +272,8 @@
 
             document.body.appendChild(confetti);
 
-            setTimeout(() => confetti.remove(), 3000);
+            // Remove confetti element after animation to prevent DOM clutter
+            setTimeout(() => confetti.remove(), 4000);
         }
     }
 
