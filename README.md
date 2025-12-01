@@ -2,9 +2,8 @@
 
 A classic browser-based card matching game built with vanilla JavaScript. Test your memory by finding all matching pairs of cards as fast as possible!
 
-[**🚀 Play the Live Demo**](https://YOUR-USERNAME.github.io/memory-game/)
+[**🚀 Play the Live Demo**](https://nishansanjeewa.github.io/memory-game/)
 
-![Game Screenshot](./screenshot.png)
 ## 🎮 How to Play
 
 1.  Click on a card to flip it over.
