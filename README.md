@@ -25,26 +25,6 @@ A classic browser-based card matching game built with vanilla JavaScript. Test y
 * **CSS3:** Flexbox/Grid for layout and animations for card flipping.
 * **JavaScript (ES6):** Game logic, DOM manipulation, and state management.
 
-## 📂 Installation & Setup
-
-If you want to run this project locally on your machine:
-
-1.  **Clone the repository**
-    ```bash
-    git clone [https://github.com/YOUR-USERNAME/memory-game.git](https://github.com/YOUR-USERNAME/memory-game.git)
-    ```
-2.  **Navigate to the folder**
-    ```bash
-    cd memory-game
-    ```
-3.  **Open `index.html`** in your web browser.
-
-## 🔮 Future Improvements
-
-* Add difficulty levels (Easy, Medium, Hard).
-* Add sound effects for flipping and matching.
-* Save high scores using LocalStorage.
-
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
