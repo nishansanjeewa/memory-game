@@ -27,7 +27,7 @@ A classic browser-based card matching game built with vanilla JavaScript. Test y
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the [MIT License]
 
 ---
 
